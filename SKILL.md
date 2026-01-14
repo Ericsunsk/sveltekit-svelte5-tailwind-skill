@@ -189,7 +189,7 @@ cd my-app
 npm install
 
 # 2. Add Tailwind v4
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 
 # 3. Configure Vite (vite.config.js)
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -209,7 +209,7 @@ export default {
 <script>
   import '../app.css';
 </script>
-<slot />
+{@render children()}
 
 # 6. Verify
 npm run dev
@@ -218,7 +218,8 @@ npm run dev
 **Critical configuration:**
 - Tailwind plugin MUST come before SvelteKit plugin in vite.config.js
 - Import CSS in root +layout.svelte (not app.html)
-- Use `@next` tag for Tailwind v4 packages
+- Tailwind plugin MUST come before SvelteKit plugin in vite.config.js
+- Import CSS in root +layout.svelte (not app.html)
 
 ## Common Use Cases
 

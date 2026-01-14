@@ -73,8 +73,9 @@ npm create svelte@latest my-app
 ◆  Add Prettier for code formatting?
 │  ● Yes  ← Recommended
 │
-◆  Try the Svelte 5 preview?
-│  ● Yes  ← CRITICAL: Must select for Svelte 5
+◆  Which version of Svelte to use?
+│  ○ Svelte 4
+│  ● Svelte 5  ← Choose this
 │
 └  Project created!
 ```
@@ -92,11 +93,11 @@ npm install
 │  ○ No
 ```
 
-✅ **Right: Explicitly enabling Svelte 5**
+✅ **Right: Explicitly choosing Svelte 5**
 ```bash
 # This installs Svelte 5 with runes support
-◆  Try the Svelte 5 preview?
-│  ● Yes
+◆  Which version of Svelte to use?
+│  ● Svelte 5
 ```
 
 **Verify Svelte 5 installation:**
@@ -117,7 +118,7 @@ Install Tailwind v4 using the `@next` tag and the new Vite plugin.
 
 **Install Tailwind packages:**
 ```bash
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 ```
 
 ❌ **Wrong: Installing Tailwind v3**
@@ -128,8 +129,8 @@ npm install -D tailwindcss
 
 ✅ **Right: Installing Tailwind v4**
 ```bash
-npm install -D tailwindcss@next @tailwindcss/vite@next
-# The @next tag ensures v4 installation
+npm install -D tailwindcss @tailwindcss/vite
+# Tailwind v4 is now the default
 ```
 
 **Verify installation:**
@@ -335,7 +336,7 @@ Failed to build
 
 **Fix:**
 ```bash
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 ```
 
 ### Error: "$state is not defined"

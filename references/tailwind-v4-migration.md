@@ -283,7 +283,7 @@ export default {
 npm remove @tailwindcss/forms @tailwindcss/typography @tailwindcss/aspect-ratio
 
 # v4 equivalents (many built-in now)
-npm install -D @tailwindcss/forms@next @tailwindcss/typography@next
+npm install -D @tailwindcss/forms @tailwindcss/typography
 ```
 
 ## Build Process Changes
@@ -296,7 +296,7 @@ Update your build configuration:
 npm remove tailwindcss postcss autoprefixer
 
 # Install v4
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 ```
 
 **Update vite.config.js:**
@@ -381,7 +381,7 @@ npm remove tailwindcss postcss autoprefixer
 npm install -D tailwindcss@next @tailwindcss/vite@next
 
 # Update other Tailwind plugins if used
-npm install -D @tailwindcss/forms@next @tailwindcss/typography@next
+npm install -D @tailwindcss/forms @tailwindcss/typography
 ```
 
 **Phase 3: Update build configuration (10 minutes)**

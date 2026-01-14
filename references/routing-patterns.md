@@ -296,10 +296,10 @@ Handle loading states reactively with Svelte 5 runes.
 ```svelte
 <!-- +layout.svelte -->
 <script>
-  import { navigating } from '$app/stores';
+  import { navigating } from '$app/state';
 </script>
 
-{#if $navigating}
+{#if navigating}
   <div class="fixed left-0 top-0 h-1 w-full bg-blue-500">
     <div class="h-full animate-pulse bg-blue-600"></div>
   </div>
@@ -410,17 +410,17 @@ Handle errors gracefully with error pages.
 ```svelte
 <!-- src/routes/+error.svelte -->
 <script>
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 </script>
 
 <div class="flex min-h-screen items-center justify-center">
   <div class="text-center">
     <h1 class="text-6xl font-bold text-gray-900">
-      {$page.status}
+      {page.status}
     </h1>
 
     <p class="mt-2 text-xl text-gray-600">
-      {$page.error?.message || 'Something went wrong'}
+      {page.error?.message || 'Something went wrong'}
     </p>
 
     <a
@@ -444,14 +444,14 @@ export const load: PageServerLoad = async ({ params }) => {
   });
 
   if (!product) {
-    throw error(404, {
+    error(404, {
       message: 'Product not found',
       details: `No product with ID ${params.id}`
     });
   }
 
   if (!product.published) {
-    throw error(403, 'This product is not available');
+    error(403, 'This product is not available');
   }
 
   return { product };
@@ -615,7 +615,7 @@ import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
   if (!locals.user) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   return { user: locals.user };

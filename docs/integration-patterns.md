@@ -25,7 +25,7 @@ npx sv create my-app
 cd my-app
 
 # Install Tailwind CSS v4
-npm install tailwindcss@next @tailwindcss/vite@next
+npm install tailwindcss @tailwindcss/vite
 ```
 
 ### Configuration Files
@@ -71,10 +71,11 @@ export default {
 **src/routes/+layout.svelte:**
 ```svelte
 <script>
+	let { children } = $props();
 	import '../app.css';
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ## Component Patterns

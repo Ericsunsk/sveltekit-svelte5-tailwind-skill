@@ -29,13 +29,13 @@ npm install -D tailwindcss  # Installs v3, not v4
 
 ✅ **Fix:**
 ```bash
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 ```
 
 **Verify installation:**
 ```bash
 npm list tailwindcss
-# Should show: tailwindcss@4.0.0-alpha.x
+# Should show: tailwindcss@4.x
 ```
 
 ### Error: "$state is not defined"
@@ -185,7 +185,7 @@ export default defineConfig({
   import '../app.css';  // Must be present
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ### Error: "CSS not loading in production build"

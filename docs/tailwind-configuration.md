@@ -18,7 +18,7 @@ Complete reference for configuring Tailwind CSS v4 in SvelteKit projects. Tailwi
 ### Basic Installation
 
 ```bash
-npm install tailwindcss@next @tailwindcss/vite@next
+npm install tailwindcss @tailwindcss/vite
 ```
 
 ### Vite Plugin Setup
@@ -52,7 +52,7 @@ export default defineConfig({
 	import '../app.css';
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ## Configuration Approaches
@@ -269,7 +269,7 @@ export default {
 		Toggle Dark Mode
 	</button>
 
-	<slot />
+	{@render children()}
 </div>
 ```
 
@@ -460,7 +460,7 @@ export default defineConfig({
 </script>
 
 <div class="min-h-screen bg-gray-50">
-	<slot />
+	{@render children()}
 </div>
 ```
 
@@ -644,7 +644,7 @@ export default {
 
 ```bash
 # Install v4 packages
-npm install tailwindcss@next @tailwindcss/vite@next
+npm install tailwindcss @tailwindcss/vite
 
 # Remove v3 packages (if using PostCSS approach)
 npm uninstall @tailwindcss/postcss7-compat

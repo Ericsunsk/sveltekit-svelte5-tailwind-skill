@@ -19,7 +19,7 @@ Install and configure Tailwind v4 with the new Vite plugin architecture.
 
 **Installation:**
 ```bash
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 ```
 
 **Create `src/app.css`:**
@@ -47,7 +47,7 @@ export default defineConfig({
   import '../app.css';
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ❌ **Wrong: Using v3 syntax**
@@ -83,7 +83,7 @@ Choose the right CSS import location for your needs.
   import '../app.css';
 </script>
 
-<slot />
+{@render children()}
 ```
 
 **Benefits:**

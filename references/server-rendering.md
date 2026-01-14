@@ -197,7 +197,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   });
 
   if (!product) {
-    throw error(404, 'Product not found');
+    error(404, 'Product not found');
   }
 
   return {

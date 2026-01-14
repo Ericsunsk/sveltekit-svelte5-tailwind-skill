@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   });
 
   if (!product) {
-    throw error(404, 'Product not found');
+    error(404, 'Product not found');
   }
 
   return {
@@ -367,12 +367,12 @@ export async function load({ depends }) {
 ```svelte
 <script>
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   let { data } = $props();
 
   let currentPage = $derived(
-    Number($page.url.searchParams.get('page')) || 1
+    Number(page.url.searchParams.get('page')) || 1
   );
 
   let totalPages = $derived(
@@ -499,7 +499,7 @@ export async function load({ params }) {
   });
 
   if (!product) {
-    throw error(404, {
+    error(404, {
       message: 'Product not found',
       details: `No product with ID ${params.id}`
     });
@@ -513,7 +513,7 @@ export async function load({ params }) {
 ```svelte
 <!-- +error.svelte -->
 <script>
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 </script>
 
 <div class="flex min-h-screen items-center justify-center">
@@ -559,7 +559,7 @@ import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
   if (!locals.user) {
-    throw redirect(302, '/login');
+    redirect(302, '/login');
   }
 
   return { user: locals.user };

@@ -247,7 +247,7 @@ Choose the right state management pattern:
 ```svelte
 <!-- +page.svelte -->
 <script>
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   // ✅ Server state (from load function)
   export let data;
@@ -314,7 +314,7 @@ Choose the right state management pattern:
 - **Use load() for:** Initial page data, SEO-critical content, data that must be server-rendered
 - **Use $state() for:** UI interactions, form inputs, toggles, client-only features
 - **Use context for:** User session, theme, feature flags shared across many components
-- **Use $page store for:** URL params, route data available anywhere
+- **Use page from $app/state for:** URL params, route data available anywhere
 
 ## Styling Conventions
 

@@ -119,24 +119,6 @@ function save() {
 }
 ```
 
-### $state.eager
-
-Updates UI immediately, even during async operations.
-
-```svelte
-<script>
-	let pathname = $state('/');
-</script>
-
-<nav>
-	<!-- Updates immediately on click, before navigation completes -->
-	<a href="/" aria-current={$state.eager(pathname) === '/' ? 'page' : null}>
-		home
-	</a>
-</nav>
-```
-
-**Use sparingly** - only for user feedback during async operations.
 
 ### $derived
 
