@@ -578,7 +578,7 @@ Load content progressively:
 
 <div bind:this={element} class="min-h-[400px]">
   {#if visible}
-    <slot />
+  {@render children()}
   {:else}
     <div class="h-full bg-gray-100 animate-pulse rounded"></div>
   {/if}

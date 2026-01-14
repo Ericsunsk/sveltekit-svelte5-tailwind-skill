@@ -385,8 +385,8 @@ export default defineConfig({
 - `$app/environment` - SvelteKit environment utilities
 - `$app/forms` - Form action utilities
 - `$app/navigation` - Navigation utilities
-- `$app/state` - State management
-- `$app/stores` - Page stores
+- `$app/state` - Reactive page state (preferred for Svelte 5)
+- `$app/stores` - Page stores (legacy/compatibility)
 
 ## Environment Variables Setup
 

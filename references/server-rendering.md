@@ -293,10 +293,11 @@ Ensure Tailwind CSS loads before HTML renders to prevent flash of unstyled conte
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script>
+  let { children } = $props();
   import '../app.css'; // Loaded before any page renders
 </script>
 
-<slot />
+{@render children()}
 ```
 
 **Why this works:**

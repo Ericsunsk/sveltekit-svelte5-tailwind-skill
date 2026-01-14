@@ -86,11 +86,11 @@ cd my-app
 npm install
 ```
 
-❌ **Wrong: Skipping the Svelte 5 preview option**
+❌ **Wrong: Choosing Svelte 4**
 ```bash
 # This installs Svelte 4 - incompatible with runes
-◆  Try the Svelte 5 preview?
-│  ○ No
+◆  Which version of Svelte to use?
+│  ○ Svelte 4
 ```
 
 ✅ **Right: Explicitly choosing Svelte 5**
@@ -224,10 +224,11 @@ export default {
 Edit `src/routes/+layout.svelte`:
 ```svelte
 <script>
+  let { children } = $props();
   import '../app.css';
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ❌ **Wrong: Importing in individual pages**
@@ -372,7 +373,7 @@ export default defineConfig({
   import '../app.css'; // Must be present
 </script>
 
-<slot />
+{@render children()}
 ```
 
 ### Error: "HMR disconnected" or dev server crashes

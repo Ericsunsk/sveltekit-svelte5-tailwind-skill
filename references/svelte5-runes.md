@@ -614,7 +614,7 @@ Convert Svelte 4 reactive patterns to Svelte 5 runes.
 ```svelte
 <!-- Button.svelte -->
 <button on:click>
-  <slot />
+  {@render children()}
 </button>
 ```
 
