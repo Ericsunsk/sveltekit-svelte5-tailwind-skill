@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit repository (routing documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "File-based routing, layout composition with Svelte 5 snippets, dynamic routes, loading states with runes, error handling, and nested layouts in SvelteKit."
 ---
 

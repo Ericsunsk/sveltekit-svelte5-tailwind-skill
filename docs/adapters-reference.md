@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit#4991df5 (SvelteKit adapters documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Complete reference for SvelteKit deployment adapters including adapter-auto, adapter-node, adapter-static, adapter-vercel, adapter-cloudflare, and custom adapter development"
 ---
 

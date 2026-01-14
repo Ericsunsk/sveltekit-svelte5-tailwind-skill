@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "tailwindlabs/tailwindcss#91694fb (Tailwind CSS v4 documentation and configuration)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Complete configuration reference for Tailwind CSS v4 including CSS-first configuration, Vite plugin setup, content paths, theme customization, dark mode, and SvelteKit integration"
 ---
 

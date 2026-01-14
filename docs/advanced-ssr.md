@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit#4991df5 (SvelteKit SSR, hooks, and load function documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Complete guide to advanced SSR in SvelteKit including streaming, server vs universal load, hooks (handle, handleFetch, handleError), and load function patterns"
 ---
 

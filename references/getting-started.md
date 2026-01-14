@@ -3,7 +3,7 @@ title: "Getting Started with SvelteKit 2, Svelte 5, and Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Zero to working SvelteKit + Svelte 5 + Tailwind v4 app in 10 minutes with verified integration and common setup error fixes."
 ---
 

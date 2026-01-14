@@ -1,7 +1,7 @@
 ---
 name: sveltekit-svelte5-tailwind-skill
 description: Comprehensive integration skill for building sites with SvelteKit 2, Svelte 5, and Tailwind CSS v4
-version: 1.0.0
+version: 1.1.0
 scope: integration
 distribution: author-only
 ---

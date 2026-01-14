@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit repository (data loading documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Master SvelteKit load functions with server vs client execution, passing data to Svelte 5 runes, reactive patterns, streaming, error handling, and caching strategies."
 ---
 

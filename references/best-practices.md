@@ -6,7 +6,7 @@ origin: self
 adapted_from:
   - "Community best practices from SvelteKit production deployments"
   - "Official Svelte and SvelteKit documentation patterns"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Build production-ready applications with proven patterns for project organization, component architecture, state management, styling, performance, security, and testing strategies."
 ---
 

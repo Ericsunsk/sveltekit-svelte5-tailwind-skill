@@ -3,7 +3,7 @@ title: "Systematic Troubleshooting for SvelteKit + Svelte 5 + Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Debug development server issues, build process failures, CSS pipeline problems, Vite configuration errors using systematic approaches, source maps, and browser DevTools."
 ---
 

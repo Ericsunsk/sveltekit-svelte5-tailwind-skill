@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "tailwindlabs/tailwindcss repository (v4 documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Complete Tailwind v4 integration patterns including CSS import strategies, content detection, component styling, dark mode, custom utilities, and common issues."
 ---
 

@@ -3,7 +3,7 @@ title: "Common Issues with SvelteKit 2, Svelte 5, and Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Quick fixes for module errors, CSS loading issues, Tailwind processing problems, runes SSR errors, HMR failures, TypeScript configuration, build errors, and deployment failures."
 ---
 

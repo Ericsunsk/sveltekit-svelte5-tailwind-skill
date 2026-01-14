@@ -310,7 +310,7 @@ This skill was generated using the Claude Skill Builder. To report issues or sug
 - **Idiomatic Handling**: Removed `throw` from `redirect()` and `error()` calls across the documentation.
 - **Comprehensive Audit**: Verified 24 guides for consistency with January 2026 stable standards.
 
-### v1.0.0 (2025-10-28)
+### v1.0.0 (2026-01-01)
 - Initial release
 - 17 problem-focused guides in `references/`
 - 7 comprehensive references in `docs/`

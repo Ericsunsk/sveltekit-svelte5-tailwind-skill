@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit repository (adapter documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Deploy to Vercel, Cloudflare Pages, Node servers, or static hosts with adapter configuration, environment variables, CSS build setup, and platform-specific optimizations."
 ---
 

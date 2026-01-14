@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit repository (SSR documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Master server-side rendering with Svelte 5 runes constraints, Tailwind CSS loading, FOUC prevention, hydration best practices, and SSR performance optimization."
 ---
 

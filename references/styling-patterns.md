@@ -6,7 +6,7 @@ origin: self
 adapted_from:
   - "Community styling patterns from production Svelte applications"
   - "Tailwind CSS advanced patterns and component design strategies"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Master advanced Tailwind CSS patterns in Svelte 5 including component variants, conditional styling with runes, dynamic themes, reusable utilities, and design system integration."
 ---
 

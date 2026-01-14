@@ -6,7 +6,7 @@ origin: self
 adapted_from:
   - "Web performance best practices and Core Web Vitals optimization patterns"
   - "SvelteKit and Tailwind optimization strategies from production deployments"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Achieve excellent performance scores with bundle optimization, CSS purging, code splitting, image handling, lazy loading, and Core Web Vitals improvements for production deployments."
 ---
 

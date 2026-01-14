@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/svelte repository (Svelte 5 runes documentation)"
-last_reviewed: 2025-10-28
+last_reviewed: 2026-01-14
 summary: "Master Svelte 5 runes ($state, $derived, $effect, $props) in SvelteKit with server-side rendering constraints, migration patterns, and common mistakes."
 ---
 
