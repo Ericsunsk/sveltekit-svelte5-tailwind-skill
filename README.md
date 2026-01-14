@@ -1,24 +1,30 @@
 # SvelteKit 2 + Svelte 5 + Tailwind v4 Integration Skill
 
-A comprehensive Claude skill for building modern web applications with SvelteKit 2, Svelte 5 (with runes), and Tailwind CSS v4.
+[![SvelteKit 2](https://img.shields.io/badge/SvelteKit-2.x-ff3e00?logo=svelte&logoColor=white)](https://kit.svelte.dev/)
+[![Svelte 5 Stable](https://img.shields.io/badge/Svelte-5.x_Stable-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev/)
+[![Tailwind CSS v4 Stable](https://img.shields.io/badge/Tailwind_CSS-v4.x_Stable-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A premium, comprehensive Claude skill for building modern web applications with the latest stable versions of SvelteKit 2, Svelte 5 (Runes), and Tailwind CSS v4.
+
+> **✨ Update (January 2026):** Fully audited and updated to reflect the stable release standards of Svelte 5 and Tailwind CSS v4. All references to "preview" or "@next" have been removed in favor of stable production patterns.
 
 ## Overview
 
-This skill provides searchable, curated documentation for building full-stack web applications using the modern SvelteKit + Svelte 5 + Tailwind v4 stack. It addresses the unique integration challenges when using these three frameworks together, with special focus on Svelte 5's new runes system and its interaction with server-side rendering.
+This skill provides searchable, curated documentation for building full-stack web applications using the modern SvelteKit + Svelte 5 + Tailwind v4 stack. It addresses the unique integration challenges when using these three frameworks together, with a special focus on Svelte 5's runes system and its interaction with server-side rendering.
 
 **Integration Stack:**
-- **SvelteKit 2**: Full-stack framework with file-based routing, SSR/SSG, form actions, and deployment adapters
-- **Svelte 5**: Modern reactivity with runes (`$state`, `$derived`, `$effect`, `$props`)
-- **Tailwind CSS v4**: CSS-first configuration with new Vite plugin architecture
+- **SvelteKit 2.12+**: Full-stack framework featuring `$app/state`, file-based routing, and idiomatic error/redirect handling.
+- **Svelte 5 (Stable)**: Modern reactivity with runes (`$state`, `$derived`, `$effect`, `$props`) and snippets.
+- **Tailwind CSS v4 (Stable)**: CSS-first configuration engine with high-performance Vite integration.
 
 ## Key Features
 
-- **24 comprehensive guides** covering setup, core concepts, patterns, deployment, migration, and troubleshooting
-- **Fully indexed documentation** with 24 searchable entries across two collections
-- **Problem-focused approach** with ❌ vs ✅ code comparisons and decision rules
-- **Integration-specific guidance** for combining all three frameworks correctly
-- **18,881 lines of documentation** created specifically for this integration
-- **Research-first methodology** designed to prevent common integration mistakes
+- **24 Comprehensive Guides**: Curated deep-dives into setup, architecture, patterns, and troubleshooting.
+- **Stable Production Patterns**: Code examples updated to use `$app/state` and snippet-based layouts.
+- **Problem-Focused Approach**: Clear ❌ vs ✅ comparisons to prevent common integration pitfalls.
+- **Search-Optimized**: Fully indexed sections for instant retrieval by Claude and other AI agents.
+- **Research-First Methodology**: Built-in workflows to ensure implementation follows the latest standards.
 
 ## Documentation Collections
 
@@ -98,18 +104,21 @@ export default {
 
 # 5. Import CSS in root layout (src/routes/+layout.svelte)
 <script>
+  let { children } = $props();
   import '../app.css';
 </script>
-<slot />
+
+{@render children()}
 
 # 6. Start development server
 npm run dev
 ```
 
 **Critical Configuration Points:**
-- Tailwind plugin MUST come before SvelteKit plugin in `vite.config.js`
-- Import CSS in root `+layout.svelte`, not in `app.html`
-- Use `@latest` or simply the package name for Tailwind v4 packages
+- Tailwind plugin MUST come before SvelteKit plugin in `vite.config.js`.
+- Import CSS in root `+layout.svelte`, not in `app.html`.
+- Use the stable `tailwindcss` and `@tailwindcss/vite` packages.
+- Migrate from `$app/stores` to `$app/state` for reactive page data.
 
 For complete setup instructions, see `references/getting-started.md`.
 
@@ -293,6 +302,13 @@ This skill contains original authored content created for educational purposes. 
 This skill was generated using the Claude Skill Builder. To report issues or suggest improvements, please open an issue on the skill repository.
 
 ## Changelog
+
+### v1.1.0 (2026-01-14)
+- **Stable Migration**: Removed all `@next` and "preview" references for Svelte 5 and Tailwind v4.
+- **Svelte 5 Snippets**: Updated all layout examples from `<slot />` to `{@render children()}`.
+- **SvelteKit 2.12+ State**: Migrated `$app/stores` page usage to `$app/state` for better rune compatibility.
+- **Idiomatic Handling**: Removed `throw` from `redirect()` and `error()` calls across the documentation.
+- **Comprehensive Audit**: Verified 24 guides for consistency with January 2026 stable standards.
 
 ### v1.0.0 (2025-10-28)
 - Initial release
