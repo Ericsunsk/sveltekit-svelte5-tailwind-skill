@@ -1,16 +1,17 @@
-# OS files
+# macOS
 .DS_Store
+
+# editors
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
 
-# Editor files
-.vscode/
-.idea/
-
-# Logs
+# logs
 logs/
 *.log
 
-# Research artifacts (not part of packaged skill)
+# local research / scratch artifacts
 research/
+.tmp/
