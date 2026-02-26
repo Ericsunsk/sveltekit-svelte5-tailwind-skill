@@ -1,7 +1,7 @@
 ---
 name: sveltekit-svelte5-tailwind-skill
 description: Comprehensive integration skill for building sites with SvelteKit 2, Svelte 5, and Tailwind CSS v4
-version: 1.1.0
+version: 1.1.1
 scope: integration
 distribution: author-only
 ---
@@ -53,7 +53,7 @@ When a user asks you to build something with this stack:
 2. **Then execute** - Implement the solution using the knowledge gained from documentation
 
 **Why this matters:**
-- This integration has specific constraints (e.g., runes don't work in SSR)
+- This integration has SSR-specific constraints (for example, `$effect()` is browser-only and browser APIs need guards)
 - The documentation provides authoritative guidance on configuration
 - Researching first prevents mistakes that require rework
 - You'll implement solutions that follow best practices
@@ -184,7 +184,7 @@ For a complete walkthrough, search references/getting-started.md
 Basic setup commands:
 ```bash
 # 1. Create SvelteKit project
-npm create svelte@latest my-app
+npx sv create my-app
 cd my-app
 npm install
 
@@ -218,8 +218,6 @@ npm run dev
 **Critical configuration:**
 - Tailwind plugin MUST come before SvelteKit plugin in vite.config.js
 - Import CSS in root +layout.svelte (not app.html)
-- Tailwind plugin MUST come before SvelteKit plugin in vite.config.js
-- Import CSS in root +layout.svelte (not app.html)
 
 ## Common Use Cases
 
@@ -229,7 +227,7 @@ npm run dev
 
 **Svelte 5 Runes with SSR**
 → Search: references/svelte5-runes.md
-→ Critical: "Server-Side Constraints" section - $state() doesn't work in SSR!
+→ Critical: "Server-Side Constraints" section - $effect() doesn't run in SSR, and browser APIs need guards
 
 **Forms and Progressive Enhancement**
 → Search: references/forms-and-actions.md
@@ -259,7 +257,7 @@ npm run dev
 
 **Runes causing SSR errors**
 → Search: references/svelte5-runes.md section "Server-Side Constraints"
-→ Quick fix: Don't use $state() or $effect() in SSR components
+→ Quick fix: Keep browser APIs inside browser guards, and use $effect() only for browser-side effects
 
 **Form losing state on submit**
 → Search: references/forms-and-actions.md section "Handling use:enhance Reactivity"
@@ -286,7 +284,7 @@ For systematic troubleshooting, see references/troubleshooting.md
 
 <ClientCounter initialCount={data.count} />
 
-<!-- ClientCounter.svelte (client-only runes) -->
+<!-- ClientCounter.svelte (interactive rune state) -->
 <script>
   let { initialCount } = $props();
   let count = $state(initialCount);

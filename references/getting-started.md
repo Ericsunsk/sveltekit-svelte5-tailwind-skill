@@ -3,7 +3,7 @@ title: "Getting Started with SvelteKit 2, Svelte 5, and Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Zero to working SvelteKit + Svelte 5 + Tailwind v4 app in 10 minutes with verified integration and common setup error fixes."
 ---
 
@@ -53,31 +53,12 @@ Use the official SvelteKit scaffolding to initialize your project with Svelte 5 
 
 **Create project with recommended settings:**
 ```bash
-npm create svelte@latest my-app
+npx sv create my-app
 ```
 
-**Interactive prompts - choose these options:**
-```
-┌  Welcome to SvelteKit!
-│
-◆  Which template would you like?
-│  ○ SvelteKit demo app
-│  ● Skeleton project  ← Choose this
-│
-◆  Add type checking with TypeScript?
-│  ● Yes, using TypeScript syntax  ← Recommended
-│
-◆  Add ESLint for code linting?
-│  ● Yes  ← Recommended
-│
-◆  Add Prettier for code formatting?
-│  ● Yes  ← Recommended
-│
-◆  Which version of Svelte to use?
-│  ○ Svelte 4
-│  ● Svelte 5  ← Choose this
-│
-└  Project created!
+**Optional non-interactive command:**
+```bash
+npx sv create my-app --template minimal --types ts --install npm
 ```
 
 **Install dependencies:**
@@ -86,18 +67,14 @@ cd my-app
 npm install
 ```
 
-❌ **Wrong: Choosing Svelte 4**
+❌ **Wrong: Using deprecated scaffolding**
 ```bash
-# This installs Svelte 4 - incompatible with runes
-◆  Which version of Svelte to use?
-│  ○ Svelte 4
+npm create svelte@latest my-app
 ```
 
-✅ **Right: Explicitly choosing Svelte 5**
+✅ **Right: Using current Svelte CLI**
 ```bash
-# This installs Svelte 5 with runes support
-◆  Which version of Svelte to use?
-│  ● Svelte 5
+npx sv create my-app
 ```
 
 **Verify Svelte 5 installation:**
@@ -114,7 +91,7 @@ cat package.json | grep "svelte"
 
 ## Install Tailwind CSS v4
 
-Install Tailwind v4 using the `@next` tag and the new Vite plugin.
+Install Tailwind v4 using the current Vite plugin integration.
 
 **Install Tailwind packages:**
 ```bash
@@ -141,7 +118,7 @@ npm list tailwindcss
 **Expected output:**
 ```
 my-app@0.0.1 /Users/you/my-app
-└── tailwindcss@4.0.0-alpha.x
+└── tailwindcss@4.x.x
 ```
 
 **Create Tailwind CSS file:**
@@ -419,7 +396,7 @@ Now that your integration is working:
 **Quick reference checklist:**
 - ✅ Node 18+ installed
 - ✅ SvelteKit project created with Svelte 5 enabled
-- ✅ Tailwind v4 installed with `@next` tag
+- ✅ Tailwind v4 installed
 - ✅ Vite config has plugins in correct order
 - ✅ CSS imported in root layout
 - ✅ Dev server running without errors

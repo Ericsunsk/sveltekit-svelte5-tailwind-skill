@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/kit repository (SSR documentation)"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Master server-side rendering with Svelte 5 runes constraints, Tailwind CSS loading, FOUC prevention, hydration best practices, and SSR performance optimization."
 ---
 
@@ -32,7 +32,7 @@ SvelteKit generates HTML on the server, then "hydrates" on the client.
 - Better perceived performance
 
 **SSR challenges with Svelte 5:**
-- Most runes don't run on server
+- `$effect()` and browser APIs do not run on server
 - CSS must load before HTML renders
 - Hydration mismatches cause errors
 
@@ -41,10 +41,9 @@ SvelteKit generates HTML on the server, then "hydrates" on the client.
 <!-- +page.svelte (renders on server) -->
 <script>
   let count = $state(0);
-  // ERROR: $state not defined on server
 
   localStorage.setItem('count', count);
-  // ERROR: localStorage not defined on server
+  // ERROR: localStorage is not defined on server
 </script>
 ```
 
@@ -80,22 +79,18 @@ Understand which runes work on the server and which don't.
 
 | Rune | SSR | Behavior |
 |------|-----|----------|
-| `$state()` | ❌ No | Not available on server - crashes |
-| `$derived()` | ⚠️ Partial | Runs once, doesn't re-run |
+| `$state()` | ✅ Yes | Initializes SSR render state, then hydrates |
+| `$derived()` | ✅ Yes | Evaluates during SSR render and client updates |
 | `$effect()` | ❌ No | Skipped entirely on server |
 | `$props()` | ✅ Yes | Receives data from load function |
 | `$bindable()` | ✅ Yes | Props work normally |
 
-**$state() - client-only:**
+**$state() - hydration-safe state from server data:**
 ```svelte
 <script>
   let { data } = $props();
 
-  // ❌ Crashes on server
-  // let count = $state(0);
-
-  // ✅ Use data from load function
-  // Hydrate as $state on client
+  // ✅ Initialize from load data
   let count = $state(data.count);
 </script>
 ```

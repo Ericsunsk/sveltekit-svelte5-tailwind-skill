@@ -6,7 +6,7 @@ origin: self
 adapted_from:
   - "tailwindlabs/tailwindcss GitHub repository (v4 changelog and migration patterns)"
   - "Community migration experiences from SvelteKit projects"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Upgrade from Tailwind CSS v3 to v4 in SvelteKit projects with step-by-step migration, breaking changes checklist, and rollback strategy for production deployments."
 ---
 
@@ -378,7 +378,7 @@ npm list tailwindcss postcss autoprefixer > pre-migration-deps.txt
 npm remove tailwindcss postcss autoprefixer
 
 # Install v4 dependencies
-npm install -D tailwindcss@next @tailwindcss/vite@next
+npm install -D tailwindcss @tailwindcss/vite
 
 # Update other Tailwind plugins if used
 npm install -D @tailwindcss/forms @tailwindcss/typography

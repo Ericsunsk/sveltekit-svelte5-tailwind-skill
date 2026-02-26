@@ -6,7 +6,7 @@ origin: self
 adapted_from:
   - "sveltejs/svelte GitHub repository (Svelte 5 migration guide and breaking changes)"
   - "Community migration experiences from SvelteKit projects"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Upgrade existing SvelteKit applications from Svelte 4 to Svelte 5 with complete migration paths for stores, reactive statements, slots, events, and lifecycle hooks with testing strategies."
 ---
 
@@ -877,11 +877,13 @@ npm run build && npm run preview # Test production
 
 Common problems and solutions:
 
-**Issue: "$state is not defined on server"**
+**Issue: Browser API access during SSR**
 ```svelte
-<!-- ❌ Problem: Using $state in SSR -->
+<!-- ❌ Problem: Accessing localStorage during SSR -->
 <script>
-  let count = $state(0); // Crashes on server
+  let count = $state(0);
+  localStorage.setItem('count', count.toString());
+  // ERROR: localStorage is not defined on server
 </script>
 
 <!-- ✅ Solution: Check for browser context -->
@@ -892,8 +894,7 @@ Common problems and solutions:
 
   $effect(() => {
     if (browser) {
-      // Client-only effect
-      console.log('Count:', count);
+      localStorage.setItem('count', count.toString());
     }
   });
 </script>

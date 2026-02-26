@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "sveltejs/svelte repository (Svelte 5 runes documentation)"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Master Svelte 5 runes ($state, $derived, $effect, $props) in SvelteKit with server-side rendering constraints, migration patterns, and common mistakes."
 ---
 
@@ -15,24 +15,27 @@ Svelte 5 introduces runes - a new reactivity system that replaces stores and rea
 
 ## Runes Overview for SvelteKit
 
-Runes provide fine-grained reactivity but have strict server-side constraints in SvelteKit.
+Runes provide fine-grained reactivity with important SSR behavior differences in SvelteKit.
 
 **The five core runes:**
-- `$state()` - Reactive state (client-only)
-- `$derived()` - Computed values (works on server, doesn't re-run)
+- `$state()` - Reactive state (works in components, including SSR render + hydration)
+- `$derived()` - Computed values (evaluates during SSR render and re-evaluates on client updates)
 - `$effect()` - Side effects (client-only)
 - `$props()` - Component props (works on server)
 - `$bindable()` - Two-way binding (works on server)
 
-**Critical SSR constraint:**
-Most runes don't run on the server. You must separate server data loading from client reactivity.
+**Critical SSR constraints:**
+- `$effect()` does not run during SSR
+- Browser APIs (`window`, `document`, `localStorage`) are unavailable during SSR
+- Use `load` + `$props()` for server data, and keep browser-only logic behind guards
 
-❌ **Wrong: Using $state() in SSR context**
+❌ **Wrong: Using browser APIs during SSR render**
 ```svelte
 <!-- +page.svelte (rendered on server) -->
 <script>
-  // CRASH: $state is not defined on server
   let count = $state(0);
+  localStorage.setItem('count', count.toString());
+  // ERROR: localStorage is not defined on server
 </script>
 ```
 
@@ -57,8 +60,8 @@ export function load() {
 
 | Rune | SSR | Hydration | Use Case |
 |------|-----|-----------|----------|
-| `$state()` | ❌ No | ✅ Yes | Client-only reactive state |
-| `$derived()` | ⚠️ Partial | ✅ Yes | Computed values (doesn't re-run on server) |
+| `$state()` | ✅ Yes | ✅ Yes | Reactive state initialized for SSR + hydration |
+| `$derived()` | ✅ Yes | ✅ Yes | Computed values from reactive inputs |
 | `$effect()` | ❌ No | ✅ Yes | Side effects (client-only) |
 | `$props()` | ✅ Yes | ✅ Yes | Component props |
 | `$bindable()` | ✅ Yes | ✅ Yes | Two-way binding props |
@@ -67,7 +70,7 @@ export function load() {
 
 Use `$state()` for reactive values that change based on user interaction.
 
-**Basic usage (client-only components):**
+**Basic usage in components:**
 ```svelte
 <script>
   let count = $state(0);
@@ -449,16 +452,16 @@ Understanding what runs on the server vs client prevents runtime errors.
 
 **Server-side behavior:**
 - `+page.svelte` renders on server for initial HTML
-- `$state()` is NOT available on server
+- `$state()` can initialize render state during SSR
 - `$effect()` does NOT run on server
-- `$derived()` runs ONCE on server (doesn't re-run)
+- `$derived()` evaluates during SSR render
 - `$props()` works on server
 
 **Client-side hydration:**
-1. Server generates HTML without rune reactivity
+1. Server generates initial HTML from component state/props
 2. Client receives HTML and JavaScript
 3. Svelte "hydrates" - attaches event listeners and initializes runes
-4. Runes become reactive on client
+4. Runes continue reactively on client
 
 **Pattern: Separate server and client concerns**
 
@@ -487,7 +490,7 @@ Understanding what runs on the server vs client prevents runtime errors.
 </script>
 ```
 
-**Client-only component pattern:**
+**Browser-only component pattern:**
 ```svelte
 <!-- ClientCounter.svelte -->
 <script>
@@ -501,7 +504,8 @@ Understanding what runs on the server vs client prevents runtime errors.
 ```svelte
 <!-- +page.svelte -->
 <script>
-  export let data;
+  import { browser } from '$app/environment';
+  let { data } = $props();
 </script>
 
 {#if browser}
@@ -659,7 +663,7 @@ export function load() {
 ```svelte
 <script>
   let theme = $state(localStorage.getItem('theme'));
-  // Crashes on server
+  // ERROR: localStorage is not defined on server
 </script>
 ```
 

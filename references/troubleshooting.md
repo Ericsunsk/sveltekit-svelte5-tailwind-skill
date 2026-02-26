@@ -3,7 +3,7 @@ title: "Systematic Troubleshooting for SvelteKit + Svelte 5 + Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2026-01-14
+last_reviewed: 2026-02-26
 summary: "Debug development server issues, build process failures, CSS pipeline problems, Vite configuration errors using systematic approaches, source maps, and browser DevTools."
 ---
 
@@ -301,7 +301,7 @@ Debug Tailwind CSS processing issues step-by-step.
 ```bash
 # 1. Verify Tailwind v4 installed
 npm list tailwindcss
-# Should show: tailwindcss@4.0.0-alpha.x
+# Should show: tailwindcss@4.x.x
 
 # 2. Check Vite plugin order
 cat vite.config.js | grep -A 5 "plugins:"
@@ -753,7 +753,7 @@ When stuck, ask for help the right way.
 
 2. **Create minimal reproduction:**
    ```bash
-   npm create svelte@latest repro
+   npx sv create repro
    # Add only code needed to reproduce
    ```
 
@@ -781,9 +781,9 @@ Tailwind styles should be visible
 Page is unstyled
 
 ## Environment
-- SvelteKit: 2.0.0
-- Svelte: 5.0.0
-- Tailwind: 4.0.0-alpha.25
+- SvelteKit: 2.53.2
+- Svelte: 5.53.5
+- Tailwind: 4.2.1
 - Node: 20.10.0
 - OS: macOS 14.0
 
