@@ -281,33 +281,22 @@ ls -lh build/client/_app/immutable/assets/*.css
 </div>
 ```
 
-✅ **Fix: Use class: directive**
+✅ **Fix: Keep full class names visible in source**
 ```svelte
 <script>
   let type = $state('primary');
 </script>
 
-<div
-  class:bg-blue-500={type === 'primary'}
-  class:bg-red-500={type === 'danger'}
->
+<div class={{ 'bg-blue-500': type === 'primary', 'bg-red-500': type === 'danger' }}>
   Content
 </div>
 ```
 
-**Or safelist in `tailwind.config.js`:**
-```js
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  safelist: [
-    'bg-blue-500',
-    'bg-red-500',
-    'bg-green-500',
-    {
-      pattern: /bg-(red|blue|green)-(400|500|600)/
-    }
-  ]
-};
+**Or safelist with `@source inline()` when the classes never appear literally:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source inline("bg-blue-500 bg-red-500 bg-green-500");
 ```
 
 ### Error: "Arbitrary values not working"

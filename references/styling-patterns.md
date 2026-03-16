@@ -170,7 +170,7 @@ Build reusable components with consistent styling:
 
 Leverage Svelte 5 runes for reactive styling:
 
-**Boolean conditions with class: directive:**
+**Boolean conditions with class objects/arrays:**
 ```svelte
 <script>
   let isActive = $state(false);
@@ -178,15 +178,17 @@ Leverage Svelte 5 runes for reactive styling:
   let hasError = $state(false);
 </script>
 
-<!-- ✅ CORRECT: Use class: for boolean conditions -->
+<!-- ✅ CORRECT: Prefer class objects/arrays in modern Svelte -->
 <button
-  class="btn"
-  class:bg-blue-600={isActive}
-  class:bg-gray-400={!isActive}
-  class:animate-pulse={isLoading}
-  class:ring-2={isActive}
-  class:ring-blue-500={isActive}
-  class:border-red-500={hasError}
+  class={[
+    'btn',
+    {
+      'bg-blue-600 ring-2 ring-blue-500': isActive,
+      'bg-gray-400': !isActive,
+      'animate-pulse': isLoading,
+      'border-red-500': hasError
+    }
+  ]}
   onclick={() => isActive = !isActive}
 >
   Toggle State
@@ -359,23 +361,14 @@ Handle dynamic values safely:
 </div>
 ```
 
-**Safelist approach for limited dynamic classes:**
+**Inline-source approach for limited dynamic classes:**
 ```css
 /* app.css */
 @import "tailwindcss";
 
-/* Safelist all status colors */
-@utility safe(bg-gray-500);
-@utility safe(bg-blue-500);
-@utility safe(bg-green-500);
-@utility safe(bg-yellow-500);
-@utility safe(bg-red-500);
-
-@utility safe(text-gray-600);
-@utility safe(text-blue-600);
-@utility safe(text-green-600);
-@utility safe(text-yellow-600);
-@utility safe(text-red-600);
+/* Keep literal-only classes in the generated output */
+@source inline("bg-gray-500 bg-blue-500 bg-green-500 bg-yellow-500 bg-red-500");
+@source inline("text-gray-600 text-blue-600 text-green-600 text-yellow-600 text-red-600");
 ```
 
 ```svelte

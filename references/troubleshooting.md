@@ -347,11 +347,12 @@ npm run preview
 **Tailwind classes purged incorrectly:**
 
 ```bash
-# 1. Check content configuration
-cat tailwind.config.js
+# 1. Check the CSS entrypoint
+cat src/app.css
 
-# Should include:
-# content: ['./src/**/*.{html,js,svelte,ts}']
+# Look for:
+# @import "tailwindcss";
+# @source "../shared-ui/src/**/*.{svelte,ts}"   # only if you need extra sources
 
 # 2. Build with debug
 npm run build -- --debug 2>&1 | grep -i tailwind
@@ -360,18 +361,13 @@ npm run build -- --debug 2>&1 | grep -i tailwind
 grep -r "class=.*{" src/
 # Look for template literals in class attributes
 
-# 4. Add to safelist if needed
+# 4. Safelist literal-only classes if needed
 ```
 
-```js
-// tailwind.config.js
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  safelist: [
-    'bg-red-500',  // Add classes that are being purged
-    'bg-blue-500'
-  ]
-};
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source inline("bg-red-500 bg-blue-500");
 ```
 
 **CSS source maps:**

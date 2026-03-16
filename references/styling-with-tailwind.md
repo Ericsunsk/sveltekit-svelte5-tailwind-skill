@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "tailwindlabs/tailwindcss repository (v4 documentation)"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-03-16
 summary: "Complete Tailwind v4 integration patterns including CSS import strategies, content detection, component styling, dark mode, custom utilities, and common issues."
 ---
 
@@ -64,12 +64,13 @@ export default defineConfig({
 @import "tailwindcss";
 ```
 
-**Optional `tailwind.config.js` (v4 works without it):**
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}']
-};
+**Tailwind v4 scans a standard SvelteKit app automatically:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+
+/* Add extra sources only when they live outside the default scan */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
 ## CSS Import Strategies
@@ -92,24 +93,19 @@ Choose the right CSS import location for your needs.
 - HMR-friendly
 - CSS available to all routes
 
-**Strategy 2: Vite config only (no import needed)**
-```js
-// vite.config.js
-export default defineConfig({
-  plugins: [
-    tailwindcss(), // Auto-injects CSS
-    sveltekit()
-  ]
-});
+**Strategy 2: Add explicit extra sources in CSS**
+```css
+/* src/app.css */
+@import "tailwindcss";
+
+/* Example: shared package outside the default app scan */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
 **Benefits:**
-- Less boilerplate
-- Automatic injection
-
-**Drawbacks:**
-- Less explicit
-- Harder to debug CSS loading issues
+- Keeps configuration in the CSS entrypoint
+- Works with Tailwind's v4 source detection model
+- Makes external package coverage explicit
 
 ❌ **Wrong: Importing in every page**
 ```svelte
@@ -145,17 +141,19 @@ body {
 
 ## Content Detection and Purging
 
-Configure Tailwind to detect classes in Svelte's template syntax.
+Tailwind v4 scans your project automatically. Only add `@source` directives when the classes live outside the default scan or when you need explicit safelisting.
 
-**Basic content configuration:**
-```js
-// tailwind.config.js
-export default {
-  content: [
-    './src/**/*.{html,js,svelte,ts}',
-    './src/**/*.{svelte,js,ts}' // Redundant but explicit
-  ]
-};
+**Default app setup:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+```
+
+**Add external sources explicitly:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
 **Problem: Dynamic classes in conditionals**
@@ -171,46 +169,22 @@ export default {
 <div class="bg-{color}-500">Bad</div>
 ```
 
-✅ **Right: Use class: directive with full class names**
+✅ **Right: Keep full class names visible in source**
 ```svelte
 <script>
   let type = $state('primary');
 </script>
 
-<div
-  class:bg-blue-500={type === 'primary'}
-  class:bg-red-500={type === 'secondary'}
->
+<div class={{ 'bg-blue-500': type === 'primary', 'bg-red-500': type === 'secondary' }}>
   Good
 </div>
 ```
 
-**Safelisting dynamic classes:**
-```js
-// tailwind.config.js
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  safelist: [
-    'bg-red-500',
-    'bg-green-500',
-    'bg-blue-500',
-    {
-      pattern: /bg-(red|green|blue)-(400|500|600)/,
-      variants: ['hover', 'focus']
-    }
-  ]
-};
-```
-
-**Svelte-specific content patterns:**
-```js
-export default {
-  content: [
-    './src/**/*.{html,js,svelte,ts}',
-    './src/routes/**/*.{svelte,js,ts}',  // Routes
-    './src/lib/**/*.{svelte,js,ts}'      // Components
-  ]
-};
+**Safelist only when classes never appear literally in source:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source inline("bg-red-500 bg-green-500 bg-blue-500 hover:bg-blue-600 focus:bg-blue-600");
 ```
 
 **Content detection for Svelte control blocks:**
@@ -414,15 +388,13 @@ Use Tailwind's arbitrary value syntax in Svelte templates.
 
 ## Dark Mode Implementation
 
-Implement dark mode with Tailwind's class strategy.
+Implement dark mode with Tailwind's CSS-driven variant strategy.
 
 **Configure dark mode:**
-```js
-// tailwind.config.js
-export default {
-  darkMode: 'class', // or 'media' for system preference
-  content: ['./src/**/*.{html,js,svelte,ts}']
-};
+```css
+/* src/app.css */
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 ```
 
 **Dark mode toggle component:**
@@ -753,10 +725,11 @@ plugins: [tailwindcss(), sveltekit()] // Correct order
 <div class="bg-{color}-500">Won't work</div>
 ```
 
-✅ **Fix: Use safelist or class: directive**
-```js
-// tailwind.config.js
-safelist: ['bg-red-500', 'bg-blue-500']
+✅ **Fix: Keep full class names visible or safelist with `@source inline()`**
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source inline("bg-red-500 bg-blue-500")
 ```
 
 **Issue 4: SSR hydration mismatch**
@@ -785,8 +758,8 @@ safelist: ['bg-red-500', 'bg-blue-500']
 **Debugging checklist:**
 - [ ] Vite plugin order correct (Tailwind before SvelteKit)
 - [ ] CSS imported in root layout
-- [ ] Content paths include all files
-- [ ] Dynamic classes safelisted
+- [ ] External sources added with `@source` when needed
+- [ ] Literal-only classes safelisted with `@source inline()` when needed
 - [ ] No template literals in class names
 - [ ] Browser checks for client-only code
 - [ ] Build completes without errors

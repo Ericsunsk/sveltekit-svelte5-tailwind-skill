@@ -1,9 +1,6 @@
 ---
 name: sveltekit-svelte5-tailwind-skill
 description: Comprehensive integration skill for building sites with SvelteKit 2, Svelte 5, and Tailwind CSS v4
-version: 1.1.1
-scope: integration
-distribution: author-only
 ---
 
 # SvelteKit 2 + Svelte 5 + Tailwind v4 Integration Skill
@@ -99,7 +96,7 @@ This skill uses a 5-stage search process for efficient documentation lookup:
 
 Find all documentation indexes:
 ```bash
-find . -name "index.jsonl" -type f
+find references docs -name "index.jsonl" -type f 2>/dev/null
 ```
 
 Expected output:
@@ -107,9 +104,9 @@ Expected output:
 - `./docs/index.jsonl` (7 comprehensive references)
 
 Sample each collection to understand its scope:
-```
-Read references/index.jsonl with offset: 1, limit: 5
-Read docs/index.jsonl with offset: 1, limit: 5
+```bash
+sed -n '1,5p' references/index.jsonl
+sed -n '1,5p' docs/index.jsonl
 ```
 
 Determine which collection(s) are relevant to your query.
@@ -117,9 +114,9 @@ Determine which collection(s) are relevant to your query.
 ### Stage 1: Load Relevant Indexes
 
 Read the complete index file(s) for your chosen collection(s):
-```
-Read references/index.jsonl  # For how-to guides and troubleshooting
-Read docs/index.jsonl         # For API reference and configuration
+```bash
+sed -n '1,$p' references/index.jsonl  # For how-to guides and troubleshooting
+sed -n '1,$p' docs/index.jsonl        # For API reference and configuration
 ```
 
 ### Stage 2: Reason About Candidates
@@ -142,9 +139,9 @@ Consider:
 ### Stage 3: Get Section Details
 
 For your 3-4 candidates, read their sections.jsonl entries:
-```
-Read references/sections.jsonl with offset: {index}, limit: 1
-Read docs/sections.jsonl with offset: {index}, limit: 1
+```bash
+sed -n '{index}p' references/sections.jsonl
+sed -n '{index}p' docs/sections.jsonl
 ```
 
 **Important:** Index number from index.jsonl = line number in sections.jsonl
@@ -154,9 +151,9 @@ Analyze the section summaries to identify which sections address your query.
 ### Stage 4: Read Targeted Sections
 
 Read only the relevant sections:
-```
-Read references/getting-started.md with offset: 45, limit: 89
-Read docs/svelte5-api-reference.md with offset: 120, limit: 65
+```bash
+sed -n '45,133p' references/getting-started.md
+sed -n '120,184p' docs/svelte5-api-reference.md
 ```
 
 Use the offset and limit from the sections.jsonl data for precise reading.
@@ -186,32 +183,18 @@ Basic setup commands:
 # 1. Create SvelteKit project
 npx sv create my-app
 cd my-app
-npm install
 
-# 2. Add Tailwind v4
+# 2. Add Tailwind via the official Svelte add-on (preferred)
+npx sv add tailwindcss
+
+# 3. Fallback manual setup when you need to wire things yourself
 npm install -D tailwindcss @tailwindcss/vite
 
-# 3. Configure Vite (vite.config.js)
-import { sveltekit } from '@sveltejs/kit/vite';
-import tailwindcss from '@tailwindcss/vite';
+# vite.config.js -> tailwindcss() MUST be before sveltekit()
+# src/app.css -> @import "tailwindcss";
+# src/routes/+layout.svelte -> import '../app.css'
 
-export default {
-  plugins: [
-    tailwindcss(),  // MUST be before sveltekit()
-    sveltekit()
-  ]
-};
-
-# 4. Create app.css
-@import "tailwindcss";
-
-# 5. Import in root layout (src/routes/+layout.svelte)
-<script>
-  import '../app.css';
-</script>
-{@render children()}
-
-# 6. Verify
+# 4. Verify
 npm run dev
 ```
 
@@ -231,7 +214,7 @@ npm run dev
 
 **Forms and Progressive Enhancement**
 → Search: references/forms-and-actions.md
-→ Key pattern: Manual enhance() for rune compatibility
+→ Key pattern: Start with plain use:enhance; switch to a custom enhance() callback when you need pending state, optimistic UI, or manual invalidation control
 
 **Styling Components**
 → Search: references/styling-with-tailwind.md, references/styling-patterns.md
@@ -261,7 +244,7 @@ npm run dev
 
 **Form losing state on submit**
 → Search: references/forms-and-actions.md section "Handling use:enhance Reactivity"
-→ Quick fix: Use manual enhance() callback
+→ Quick fix: Add a custom enhance() callback only if you need to preserve local pending state across the submission lifecycle
 
 **HMR breaking**
 → Search: references/common-issues.md section "Hot Module Reload Problems"
@@ -269,7 +252,7 @@ npm run dev
 
 **Tailwind classes not working**
 → Search: references/styling-with-tailwind.md section "Content Detection and Purging"
-→ Quick fix: Check content paths in config, use full class names
+→ Quick fix: Check automatic source detection, add explicit @source directives for files outside the default scan, and keep full class names visible in source
 
 For systematic troubleshooting, see references/troubleshooting.md
 
@@ -279,7 +262,7 @@ For systematic troubleshooting, see references/troubleshooting.md
 ```svelte
 <!-- +page.svelte (SSR-safe) -->
 <script>
-  export let data;
+  let { data } = $props();
 </script>
 
 <ClientCounter initialCount={data.count} />
@@ -316,8 +299,8 @@ For systematic troubleshooting, see references/troubleshooting.md
   let active = $state(false);
 </script>
 
-<!-- ✅ GOOD: Full class names -->
-<div class:bg-blue-500={active} class:bg-gray-200={!active}>
+<!-- ✅ GOOD: Svelte 5.16+ object syntax keeps full class names visible -->
+<div class={{ 'bg-blue-500': active, 'bg-gray-200': !active }}>
   Button
 </div>
 
@@ -384,6 +367,10 @@ All code examples and patterns are tested with these versions.
 ```
 sveltekit-svelte5-tailwind-skill/
 ├── SKILL.md                           # This file
+├── agents/
+│   └── openai.yaml                    # UI metadata for skill pickers
+├── scripts/
+│   └── rebuild_search_indexes.py      # Rebuilds JSONL search indexes after doc edits
 ├── references/                        # Problem-focused guides (17 files)
 │   ├── index.jsonl                    # Search index
 │   ├── sections.jsonl                 # Section details
@@ -418,6 +405,14 @@ sveltekit-svelte5-tailwind-skill/
 │   └── integration-patterns.md
 ├── provenance.jsonl                   # Source attribution
 └── skill.manifest.json                # Skill metadata
+```
+
+## Maintenance
+
+After editing any Markdown file in `references/` or `docs/`, rebuild the search indexes:
+
+```bash
+python3 scripts/rebuild_search_indexes.py .
 ```
 
 ## Distribution Mode

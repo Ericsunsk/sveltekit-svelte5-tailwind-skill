@@ -65,7 +65,7 @@ my-app/
 │   │   │   └── users/
 │   │   │       └── +server.ts
 │   │   └── +layout.svelte       # Root layout
-│   ├── app.css                  # Tailwind imports
+│   ├── app.css                  # Tailwind entrypoint and theme directives
 │   ├── app.d.ts                 # Type definitions
 │   └── app.html                 # HTML template
 ├── static/
@@ -79,7 +79,7 @@ my-app/
 ├── .env.example                 # Template for .env
 ├── svelte.config.js             # SvelteKit configuration
 ├── vite.config.js               # Vite configuration
-├── tailwind.config.js           # Tailwind configuration
+├── tailwind.config.js           # Optional legacy Tailwind compatibility config
 ├── tsconfig.json                # TypeScript configuration
 └── package.json
 ```
@@ -524,25 +524,16 @@ export default config;
 ```
 
 **Tailwind configuration for environments:**
-```js
-// tailwind.config.js
-const production = process.env.NODE_ENV === 'production';
+```css
+/* src/app.css */
+@import "tailwindcss";
 
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+/* Add external sources only when a deployment environment needs them */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 
-  // Production optimizations
-  ...(production && {
-    // Additional purge patterns for production
-    safelist: []
-  }),
-
-  theme: {
-    extend: {}
-  },
-
-  plugins: []
-};
+@theme {
+  --color-primary: #3b82f6;
+}
 ```
 
 **Runtime environment detection:**

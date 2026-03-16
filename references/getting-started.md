@@ -3,7 +3,7 @@ title: "Getting Started with SvelteKit 2, Svelte 5, and Tailwind v4"
 version_anchors: ["SvelteKit@2.x", "Svelte@5.x", "Tailwind@4.x"]
 authored: true
 origin: self
-last_reviewed: 2026-02-26
+last_reviewed: 2026-03-16
 summary: "Zero to working SvelteKit + Svelte 5 + Tailwind v4 app in 10 minutes with verified integration and common setup error fixes."
 ---
 
@@ -91,26 +91,31 @@ cat package.json | grep "svelte"
 
 ## Install Tailwind CSS v4
 
-Install Tailwind v4 using the current Vite plugin integration.
+Install Tailwind v4 using the official Svelte add-on first. It wires up the Vite plugin, `src/app.css`, and the root layout import for you.
 
-**Install Tailwind packages:**
+**Preferred command:**
+```bash
+npx sv add tailwindcss
+```
+
+**Manual fallback:**
 ```bash
 npm install -D tailwindcss @tailwindcss/vite
 ```
 
-❌ **Wrong: Installing Tailwind v3**
+❌ **Wrong: Installing an old setup path and assuming the config matches v4**
 ```bash
 npm install -D tailwindcss
-# This installs v3.x which uses different config
+# Missing @tailwindcss/vite and the rest of the integration work
 ```
 
-✅ **Right: Installing Tailwind v4**
+✅ **Right: Using the current Tailwind v4 integration**
 ```bash
-npm install -D tailwindcss @tailwindcss/vite
-# Tailwind v4 is now the default
+npx sv add tailwindcss
+# Or manually install tailwindcss + @tailwindcss/vite when you need explicit control
 ```
 
-**Verify installation:**
+**Verify installation (manual path):**
 ```bash
 npm list tailwindcss
 ```
@@ -121,7 +126,7 @@ my-app@0.0.1 /Users/you/my-app
 └── tailwindcss@4.x.x
 ```
 
-**Create Tailwind CSS file:**
+**If you used the manual path, create the Tailwind entry file:**
 ```bash
 touch src/app.css
 ```
@@ -147,7 +152,7 @@ touch src/app.css
 
 ## Configure Vite and Tailwind
 
-Configure Vite with the correct plugin order - this is critical for preventing build errors.
+If you used `npx sv add tailwindcss`, this section is mostly done for you. For manual setup, keep the plugin order exactly as shown here.
 
 **Edit `vite.config.js`:**
 ```js
@@ -183,17 +188,13 @@ export default defineConfig({
 });
 ```
 
-**Create Tailwind config (optional for v4):**
-```bash
-touch tailwind.config.js
-```
+**Tailwind config is optional in v4:**
+```css
+/* src/app.css */
+@import "tailwindcss";
 
-**Basic `tailwind.config.js` (minimal for v4):**
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./src/**/*.{html,js,svelte,ts}']
-};
+/* Add explicit sources only when they live outside Tailwind's automatic scan */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
 **Import CSS in root layout:**

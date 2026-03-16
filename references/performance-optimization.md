@@ -156,33 +156,25 @@ npm uninstall unused-package-1 unused-package-2
 
 Tailwind v4 automatically purges unused CSS, but you can optimize further:
 
-**Content paths configuration:**
+**Add explicit sources only when Tailwind cannot see a file automatically:**
 ```css
 /* app.css */
 @import "tailwindcss";
 
-/* Specify all paths containing class names */
-@source "src/routes/**/*.svelte";
-@source "src/lib/**/*.svelte";
-@source "src/lib/**/*.ts"; /* For class strings in TypeScript */
+/* Example: a shared package outside the app root */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
-**Safelist dynamic classes:**
+**Safelist only when classes never appear literally in source:**
 ```css
 /* app.css */
 @import "tailwindcss";
 
-/* Safelist classes generated dynamically */
-@utility safe(bg-red-500);
-@utility safe(bg-green-500);
-@utility safe(bg-blue-500);
-@utility safe(text-red-600);
-@utility safe(text-green-600);
-@utility safe(text-blue-600);
+@source inline("bg-red-500 bg-green-500 bg-blue-500 text-red-600 text-green-600 text-blue-600");
 ```
 
 ```svelte
-<!-- Dynamic classes that need safelisting -->
+<!-- This works because every possible class string exists literally in source -->
 <script>
   let status = $state('success'); // 'success' | 'error' | 'warning'
 
@@ -210,11 +202,11 @@ Tailwind v4 automatically purges unused CSS, but you can optimize further:
 <script>
   let color = $state('blue');
 </script>
-<div
-  class:bg-blue-500={color === 'blue'}
-  class:bg-red-500={color === 'red'}
-  class:bg-green-500={color === 'green'}
->
+<div class={{
+  'bg-blue-500': color === 'blue',
+  'bg-red-500': color === 'red',
+  'bg-green-500': color === 'green'
+}}>
   Good pattern
 </div>
 ```

@@ -38,8 +38,8 @@ Package skills should instruct users (Claude) to follow a research-first approac
 
 **Instead, teach users to:**
 1. Follow research-first methodology (research before implementing)
-2. Discover indexes using `find` command and Read tool
-3. Load index.jsonl files into context with Read tool
+2. Discover indexes using `find`, then inspect them with `sed`
+3. Load index.jsonl files into context with local reads
 4. Reason about which files are relevant
 5. Read sections.jsonl entries for candidates
 6. Read targeted sections from documentation files
@@ -89,9 +89,9 @@ find . -name "index.jsonl" -type f
 ```
 
 For each index found, read 3-5 sample entries to understand the collection:
-```
-Read docs/index.jsonl with offset: 1, limit: 5
-Read references/index.jsonl with offset: 1, limit: 5
+```bash
+sed -n '1,5p' docs/index.jsonl
+sed -n '1,5p' references/index.jsonl
 ```
 
 Determine which collections are relevant to your query.
@@ -99,9 +99,9 @@ Determine which collections are relevant to your query.
 **Stage 1: Load relevant indexes**
 
 Read the complete index.jsonl file(s) for relevant collection(s):
-```
-Read docs/index.jsonl
-Read references/index.jsonl
+```bash
+sed -n '1,$p' docs/index.jsonl
+sed -n '1,$p' references/index.jsonl
 ```
 
 **Stage 2: Reason about candidates**
@@ -115,9 +115,9 @@ Analyze all summaries to identify 3-4 most relevant files across collections:
 **Stage 3: Get section details**
 
 For your 3-4 candidates, read their sections.jsonl entries:
-```
-Read docs/sections.jsonl with offset: {index}, limit: 1
-Read references/sections.jsonl with offset: {index}, limit: 1
+```bash
+sed -n '{index}p' docs/sections.jsonl
+sed -n '{index}p' references/sections.jsonl
 ```
 
 Note: Index number from docs/index.jsonl maps to line number in docs/sections.jsonl
@@ -125,9 +125,9 @@ Note: Index number from docs/index.jsonl maps to line number in docs/sections.js
 **Stage 4: Read targeted sections**
 
 Read only the relevant sections from documentation files:
-```
-Read docs/authentication/overview.md with offset: 45, limit: 89
-Read references/getting-started.md with offset: 18, limit: 62
+```bash
+sed -n '45,133p' docs/authentication/overview.md
+sed -n '18,79p' references/getting-started.md
 ```
 
 **Stage 5: Synthesize and answer**
@@ -204,6 +204,12 @@ Each line contains comprehensive file metadata with section-level details:
 - Entry with `"index": N` in index.jsonl corresponds to line N in sections.jsonl
 - Both entries share identical `index` and `relative_path` values
 - This 1:1 mapping enables efficient cross-referencing
+
+If any Markdown file changes, rebuild the indexes before relying on offsets:
+
+```bash
+python3 scripts/rebuild_search_indexes.py .
+```
 
 ### 3. Multiple Documentation Collections
 

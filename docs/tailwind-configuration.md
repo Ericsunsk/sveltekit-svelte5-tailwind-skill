@@ -5,7 +5,7 @@ authored: true
 origin: self
 adapted_from:
   - "tailwindlabs/tailwindcss#91694fb (Tailwind CSS v4 documentation and configuration)"
-last_reviewed: 2026-01-14
+last_reviewed: 2026-03-16
 summary: "Complete configuration reference for Tailwind CSS v4 including CSS-first configuration, Vite plugin setup, content paths, theme customization, dark mode, and SvelteKit integration"
 ---
 
@@ -16,6 +16,12 @@ Complete reference for configuring Tailwind CSS v4 in SvelteKit projects. Tailwi
 ## Installation and Setup
 
 ### Basic Installation
+
+```bash
+npx sv add tailwindcss
+```
+
+Manual fallback:
 
 ```bash
 npm install tailwindcss @tailwindcss/vite
@@ -31,8 +37,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [
-		sveltekit(),
-		tailwindcss()
+		tailwindcss(),
+		sveltekit()
 	]
 });
 ```
@@ -80,15 +86,14 @@ Configure directly in CSS using `@theme` and `@plugin`.
 }
 ```
 
-### JavaScript Configuration (v3 Compatible)
+### JavaScript Compatibility Configuration
 
-Use `tailwind.config.js` for backwards compatibility.
+Use `tailwind.config.js` sparingly for legacy compatibility. In v4, `content`, `safelist`, `corePlugins`, and `separator` are no longer the primary configuration path.
 
 ```js
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			colors: {
@@ -103,54 +108,31 @@ export default {
 
 ## Content Configuration
 
-### Content Paths
+### Automatic Detection
 
-Specify where Tailwind should look for class names.
+Tailwind v4 scans a normal SvelteKit app automatically. Add `@source` only for files outside the default scan.
 
-**CSS-first approach:**
+**Default setup:**
 ```css
-@source "../../lib/**/*.{html,js,svelte,ts}";
+/* src/app.css */
+@import "tailwindcss";
 ```
 
-**JavaScript approach:**
-```js
-// tailwind.config.js
-export default {
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		'./src/**/*.svelte',
-		'../shared-ui/src/**/*.svelte'
-	]
-}
+**Add external sources explicitly:**
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source "../shared-ui/src/**/*.{svelte,ts}";
 ```
 
-### Content Patterns for SvelteKit
+### Inline Safelisting
 
-```js
-export default {
-	content: [
-		'./src/routes/**/*.{svelte,js,ts}',    // All route files
-		'./src/lib/**/*.{svelte,js,ts}',       // Library components
-		'./src/app.html'                       // App template
-	]
-}
-```
+Safelist classes only when they never appear literally in source:
 
-### Safelist Classes
-
-Prevent specific classes from being purged.
-
-```js
-export default {
-	safelist: [
-		'bg-blue-500',
-		'text-red-600',
-		{
-			pattern: /bg-(red|green|blue)-(100|200|300)/,
-			variants: ['hover', 'focus']
-		}
-	]
-}
+```css
+/* src/app.css */
+@import "tailwindcss";
+@source inline("bg-blue-500 text-red-600 hover:bg-blue-600 focus:bg-blue-600");
 ```
 
 ## Theme Customization
@@ -223,13 +205,12 @@ export default {
 
 ## Dark Mode Configuration
 
-### Class-Based Dark Mode (Recommended)
+### Manual Dark Mode (Recommended)
 
-```js
-// tailwind.config.js
-export default {
-	darkMode: 'class'
-}
+```css
+/* src/app.css */
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 ```
 
 **SvelteKit implementation:**
@@ -237,32 +218,21 @@ export default {
 <!-- src/routes/+layout.svelte -->
 <script>
 	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
+	let darkMode = $state(false);
 
-	let darkMode = writable(false);
-
-	if (browser) {
-		// Initialize from localStorage
-		darkMode.set(localStorage.getItem('theme') === 'dark');
-	}
+	$effect(() => {
+		if (!browser) return;
+		const stored = localStorage.getItem('theme');
+		darkMode = stored === 'dark';
+		document.documentElement.classList.toggle('dark', darkMode);
+	});
 
 	function toggleDarkMode() {
-		darkMode.update(v => !v);
-		if (browser) {
-			const newValue = !$darkMode;
-			localStorage.setItem('theme', newValue ? 'dark' : 'light');
-			document.documentElement.classList.toggle('dark', newValue);
-		}
+		darkMode = !darkMode;
+		localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+		document.documentElement.classList.toggle('dark', darkMode);
 	}
 </script>
-
-<svelte:head>
-	{#if $darkMode}
-		<script>
-			document.documentElement.classList.add('dark');
-		</script>
-	{/if}
-</svelte:head>
 
 <div class="min-h-screen bg-white dark:bg-gray-900">
 	<button onclick={toggleDarkMode}>
@@ -273,20 +243,18 @@ export default {
 </div>
 ```
 
-### Media Query Dark Mode
+### System Dark Mode (Default)
 
-```js
-export default {
-	darkMode: 'media'  // Uses prefers-color-scheme
-}
+```css
+/* No extra configuration needed for prefers-color-scheme */
+@import "tailwindcss";
 ```
 
 ### Selector-Based Dark Mode
 
-```js
-export default {
-	darkMode: ['selector', '[data-mode="dark"]']
-}
+```css
+@import "tailwindcss";
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 ```
 
 ## Vite Plugin Options
@@ -299,11 +267,11 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
 	plugins: [
-		sveltekit(),
 		tailwindcss({
 			// Disable optimization (dev mode)
 			optimize: false
-		})
+		}),
+		sveltekit()
 	]
 });
 ```
@@ -482,7 +450,7 @@ export default defineConfig({
 <div class="bg-{color}-500" />
 ```
 
-**Solution - Use safelist or complete classes:**
+**Solution - Keep complete classes visible or safelist with `@source inline()`:**
 ```svelte
 <script>
 	let color = $state('blue');
@@ -742,7 +710,7 @@ export default {
 
 ### Dark Mode Not Working
 
-1. Verify `darkMode: 'class'` in config
+1. Verify `@custom-variant dark` exists in `src/app.css` when you are using manual dark mode
 2. Ensure `dark` class is added to `<html>` element
 3. Check localStorage integration
 4. Test without JavaScript enabled

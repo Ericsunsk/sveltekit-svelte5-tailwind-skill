@@ -144,12 +144,11 @@ export default {
 /* app.css */
 @import "tailwindcss";
 
-/* Content paths now specified in CSS */
-@source "src/**/*.{html,js,svelte,ts}";
+/* Add extra sources only when they live outside the default scan */
+@source "../shared-ui/src/**/*.{svelte,ts}";
 
-/* Safelist classes that might be dynamic */
-@utility safe(bg-red-500);
-@utility safe(text-blue-600);
+/* Safelist literal-only classes with inline source */
+@source inline("bg-red-500 text-blue-600");
 ```
 
 **SvelteKit-specific patterns:**
@@ -173,8 +172,7 @@ export default {
 </script>
 
 <!-- Use full class names for detection -->
-<div class:bg-blue-500={variant === 'primary'}
-     class:bg-green-500={variant === 'secondary'}>
+<div class={{ 'bg-blue-500': variant === 'primary', 'bg-green-500': variant === 'secondary' }}>
   Test content detection
 </div>
 ```

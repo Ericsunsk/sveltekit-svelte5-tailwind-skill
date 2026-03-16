@@ -1,0 +1,4 @@
+interface:
+  display_name: "SvelteKit + Svelte 5 + Tailwind"
+  short_description: "Build with SvelteKit, Svelte 5, and Tailwind v4"
+  default_prompt: "Use $sveltekit-svelte5-tailwind-skill to build or fix a SvelteKit, Svelte 5, and Tailwind v4 app."
