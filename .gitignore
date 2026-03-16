@@ -15,3 +15,7 @@ logs/
 # local research / scratch artifacts
 research/
 .tmp/
+
+# python cache
+__pycache__/
+*.pyc
